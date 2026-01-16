@@ -1,16 +1,15 @@
 use leptos::prelude::*;
 use leptos_meta::{Html, Title, provide_meta_context};
+use leptos_router::StaticSegment;
 use leptos_router::components::{Route, Router, Routes};
 
 use crate::components::hooks::use_theme_mode::ThemeMode;
 use crate::components::layout::app_bottom_nav::AppBottomNav;
 use crate::components::layout::app_wrapper::AppWrapper;
 use crate::components::layout::header::Header;
-use crate::domain::settings::page::SettingsPage;
-use crate::domain::test::page::TestPage;
-use crate::routing::app_route::AppRoute;
-use crate::routing::home_page::HomePage;
-use crate::routing::not_found_page::NotFoundPage;
+use crate::domain::home::{HomePage, HomeRoutes};
+use crate::domain::settings::{SettingsPage, SettingsRoutes};
+use crate::domain::test::{TestPage, TestRoutes};
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -29,9 +28,9 @@ pub fn App() -> impl IntoView {
 
                 <main class="overflow-y-auto flex-1 overflow-x-clip">
                     <Routes fallback=|| view! { <NotFoundPage /> }>
-                        <Route path=AppRoute::Home.segment() view=HomePage />
-                        <Route path=AppRoute::Test.segment() view=TestPage />
-                        <Route path=AppRoute::Settings.segment() view=SettingsPage />
+                        <Route path=StaticSegment(HomeRoutes::base_url()) view=HomePage />
+                        <Route path=StaticSegment(TestRoutes::base_segment()) view=TestPage />
+                        <Route path=StaticSegment(SettingsRoutes::base_segment()) view=SettingsPage />
                     </Routes>
                 </main>
             </AppWrapper>
@@ -39,4 +38,13 @@ pub fn App() -> impl IntoView {
             <AppBottomNav />
         </Router>
     }
+}
+
+/* ========================================================== */
+/*                     ✨ FUNCTIONS ✨                        */
+/* ========================================================== */
+
+#[component]
+fn NotFoundPage() -> impl IntoView {
+    view! { <p>"Not Found."</p> }
 }

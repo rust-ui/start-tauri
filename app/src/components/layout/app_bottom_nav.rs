@@ -1,39 +1,43 @@
+use icons::{House, Settings, TestTubeDiagonal};
 use leptos::prelude::*;
-use leptos_router::hooks::{use_location, use_navigate};
+use leptos_router::hooks::use_navigate;
 
-use crate::routing::app_route::AppRoute;
+use crate::components::hooks::use_is_current_path::use_is_current_path;
 use crate::components::ui::bottom_nav::{
     BottomNav, BottomNavButton, BottomNavGrid, BottomNavLabel,
 };
+use crate::domain::home::HomeRoutes;
+use crate::domain::settings::SettingsRoutes;
+use crate::domain::test::TestRoutes;
 
 #[component]
 pub fn AppBottomNav() -> impl IntoView {
-    let location = use_location();
     let navigate = use_navigate();
+    let is_current_path = use_is_current_path();
 
-    let is_active = move |path: &'static str| -> &'static str {
-        let pathname = location.pathname.get();
-        let matches = if path == "/" { pathname == "/" } else { pathname.starts_with(path) };
-        if matches { "page" } else { "" }
-    };
+    let nav_items: [(&'static str, &'static str, AnyView); 3] = [
+        (HomeRoutes::base_url(), HomeRoutes::label(), view! { <House /> }.into_any()),
+        (TestRoutes::base_url(), TestRoutes::label(), view! { <TestTubeDiagonal /> }.into_any()),
+        (SettingsRoutes::base_url(), SettingsRoutes::label(), view! { <Settings /> }.into_any()),
+    ];
 
     view! {
         <BottomNav class="fixed right-0 bottom-0 left-0 sm:hidden">
             <BottomNavGrid>
-                {AppRoute::bottom_nav_routes()
-                    .iter()
-                    .map(|route| {
-                        let path = route.path();
+                {nav_items
+                    .into_iter()
+                    .map(|(path, label, icon)| {
                         let navigate = navigate.clone();
+                        let is_current_path = is_current_path.clone();
                         view! {
                             <BottomNavButton
                                 on:click=move |_| {
                                     navigate(path, Default::default());
                                 }
-                                attr:aria-current=move || is_active(path)
+                                attr:aria-current=move || is_current_path(path)
                             >
-                                {route.icon()}
-                                <BottomNavLabel>{route.label()}</BottomNavLabel>
+                                {icon}
+                                <BottomNavLabel>{label}</BottomNavLabel>
                             </BottomNavButton>
                         }
                     })

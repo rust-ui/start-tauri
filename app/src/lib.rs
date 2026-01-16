@@ -5,7 +5,6 @@
 pub mod common;
 pub mod components;
 pub mod domain;
-pub mod routing;
 
 pub mod app;
 pub mod shell;

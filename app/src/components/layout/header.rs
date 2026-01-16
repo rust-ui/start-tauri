@@ -2,9 +2,10 @@ use leptos::prelude::*;
 use leptos_router::components::A;
 use leptos_router::hooks::use_location;
 
-use crate::routing::app_route::AppRoute;
 use crate::components::layout::reload_button::ReloadButton;
 use crate::components::layout::theme_toggle::ThemeToggle;
+use crate::domain::home::HomeRoutes;
+use crate::domain::test::TestRoutes;
 
 #[component]
 pub fn Header() -> impl IntoView {
@@ -21,8 +22,8 @@ pub fn Header() -> impl IntoView {
         <header class="hidden sticky top-0 justify-between items-center p-4 border-b sm:flex z-100 bg-background">
             <nav class="flex justify-between items-center w-full">
                 <div class="flex gap-4 items-center">
-                    <MenuLink route=AppRoute::Home />
-                    <MenuLink route=AppRoute::Test />
+                    <MenuLink path=HomeRoutes::base_url() label=HomeRoutes::label() />
+                    <MenuLink path=TestRoutes::base_url() label=TestRoutes::label() />
                 </div>
 
                 <ThemeToggle />
@@ -36,14 +37,13 @@ pub fn Header() -> impl IntoView {
 /* ========================================================== */
 
 #[component]
-fn MenuLink(route: AppRoute) -> impl IntoView {
+fn MenuLink(path: &'static str, label: &'static str) -> impl IntoView {
     let location = use_location();
-    let path = route.path();
     let is_active = Memo::new(move |_| location.pathname.get() == path);
 
     view! {
         <A class:font-bold=move || is_active.get() href=path>
-            {route.label()}
+            {label}
         </A>
     }
 }
