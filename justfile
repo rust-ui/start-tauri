@@ -6,6 +6,15 @@ default:
     @just --list
 
 # ============================================================================
+# SETUP
+# ============================================================================
+
+# Ignore local IP changes in tauri config files
+setup:
+    git update-index --assume-unchanged src-tauri/tauri.ios.conf.json src-tauri/tauri.android.conf.json
+    @echo "✅ Git will now ignore local IP changes in tauri config files"
+
+# ============================================================================
 # DESKTOP
 # ============================================================================
 
