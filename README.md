@@ -10,6 +10,17 @@ If not already, you can refer to [PREREQUISITES.md](PREREQUISITES.md).
 cargo install just
 ```
 
+
+## CLI
+
+```bash
+cargo install ui-cli
+
+ui starters
+# └─> start-tauri 
+```
+
+
 ## Run the project
 
 ```bash
